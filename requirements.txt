@@ -1,0 +1,9 @@
+jax==0.4.38
+blackjax==1.2.2
+diffrax==0.6.2
+flax==0.10.2
+hydra-core==1.3.2
+POT==0.9.4
+numpy==1.26.4
+matplotlib==3.10.0
+pandas==2.2.2

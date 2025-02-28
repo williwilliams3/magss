@@ -1,0 +1,8 @@
+sampler_type: digs
+sweeps: 1
+alg_steps: 5
+step_size: 0.1
+num_time_steps: 1
+sub_sampler_type: mala
+alpha_min: 0.001
+alpha_max: 0.9

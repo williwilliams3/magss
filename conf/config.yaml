@@ -1,0 +1,26 @@
+defaults:
+  - manifold: euclidean.yaml
+  - sampler: agss.yaml
+  - _self_
+
+repeats: 5
+rng_key: 1
+hydra:
+  run:
+    dir: logs/model=${manifold.model}/sampler=${sampler.sampler_type}/dim=${manifold.dim}/${hydra.job.override_dirname}/rng_key=${rng_key}
+  sweep:
+    dir: logs/model=${manifold.model}/sampler=${sampler.sampler_type}/dim=${manifold.dim}/${hydra.job.override_dirname}
+    subdir: rng_key=${rng_key}
+  job:
+    config:
+      override_dirname:
+        exclude_keys:
+          - rng_key
+          - sampler
+          - sampler.sampler_type
+          - manifold
+          - manifold.dim
+          - manifold.model
+          - manifold.run_evaluation
+          - manifold.make_plots
+

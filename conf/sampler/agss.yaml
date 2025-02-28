@@ -1,0 +1,5 @@
+sampler_type: agss
+step_size: 3.0
+max_step_outs: 8
+max_shrinkage: 100
+sub_sampler_type: ""

@@ -1,0 +1,16 @@
+run_evaluation: False
+make_plots: False
+num_samples: 10_000
+num_chains: 10
+burnin: 0
+thinning: 1
+model_rng_key: 1
+dim: 2
+metric: euclidean
+metric_param: 1.0
+model: gaussian
+sub_name: ""
+integrator: dopri5
+step_size_ode: null
+
+

@@ -1,0 +1,8 @@
+sampler_type: meta_agss
+alg_steps: 10
+step_size: 0.1
+step_size_meta: 3.0
+max_step_outs: 8
+max_shrinkage: 100
+sweeps: 1
+sub_sampler_type: mala
