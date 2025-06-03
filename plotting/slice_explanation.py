@@ -137,36 +137,54 @@ def make_slice_plot(
     plt.yticks([])  # Remove y ticks
 
     plt.tight_layout()
-    # Create dir if not exists
-    if not os.path.exists("figs/visualization"):
-        os.makedirs("figs/visualization")
-
     plt.savefig(f"figs/visualization/{metric_type}_{param}.png", dpi=200)
     plt.close()
     print(f"Saved to figs/visualization/{metric_type}_{param}.png")
 
 
 if __name__ == "__main__":
-    # Make Figure 1 in plot
-    params = ["", 1.0, 0.1, 0.01]
-    right_steps = [1, 2, 2, 3]
-    left_steps = [1, 2, 2, 2]
-    for i in range(len(params)):
-        param = params[i]
-        if i == 0:
-            metric_type = "euclidean"
-            logdensity_fn, x_ini = set_logdensity_fn("euclidean", param)
-            label = "Euclidean"
-        else:
+
+    make_figure1 = False
+    if make_figure1:
+        # Make Figure 1 in plot
+        params = ["", 1.0, 0.1, 0.01]
+        right_steps = [1, 2, 2, 3]
+        left_steps = [1, 2, 2, 2]
+        for i in range(len(params)):
+            param = params[i]
+            if i == 0:
+                metric_type = "euclidean"
+                logdensity_fn, x_ini = set_logdensity_fn("euclidean", param)
+                label = "Euclidean"
+            else:
+                metric_type = "inverse_generative"
+                logdensity_fn, x_ini = set_logdensity_fn(metric_type, param)
+                label = rf"$\lambda={param}$"
+            make_slice_plot(
+                logdensity_fn,
+                x_ini,
+                palette[i],
+                label,
+                param,
+                right_steps=right_steps[i],
+                left_steps=left_steps[i],
+            )
+    else:
+        # Detailed explanation of step-out
+        params = [0.01, 0.01, 0.01, 0.01]
+        right_steps = [1, 2, 3, 3]
+        left_steps = [1, 1, 1, 2]
+        for i in range(len(params)):
+            param = params[i]
             metric_type = "inverse_generative"
             logdensity_fn, x_ini = set_logdensity_fn(metric_type, param)
             label = rf"$\lambda={param}$"
-        make_slice_plot(
-            logdensity_fn,
-            x_ini,
-            palette[i],
-            label,
-            param,
-            right_steps=right_steps[i],
-            left_steps=left_steps[i],
-        )
+            make_slice_plot(
+                logdensity_fn,
+                x_ini,
+                palette[3],
+                label,
+                f"{param}_{i}",
+                right_steps=right_steps[i],
+                left_steps=left_steps[i],
+            )

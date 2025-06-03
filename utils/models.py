@@ -16,6 +16,7 @@ from metrics.models import (
     Rosenbrock,
     BayesianLogisticRegression,
     NineGaussians,
+    PhiFour,
     GeneralMixture,
 )
 
@@ -37,6 +38,8 @@ def set_model(manifold_config, dim):
         model = Gaussian(dim=dim)
     elif model_type == "twogaussians":
         model = TwoGaussians(dim=dim)
+    elif model_type == "twogaussiansequal":
+        model = TwoGaussians(dim=dim, weights=[0.5, 0.5])
     elif model_type == "ninegaussians":
         model = NineGaussians(dim=dim)
     elif model_type == "funnel":
@@ -50,6 +53,8 @@ def set_model(manifold_config, dim):
         dim = model.D
     elif model_type == "generalmixture":
         model = GeneralMixture(dim)
+    elif model_type == "phifour":
+        model = PhiFour(dim)
     else:
         raise ValueError("Invalid model name")
     return model, dim

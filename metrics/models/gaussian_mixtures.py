@@ -4,9 +4,12 @@ import jax.numpy as jnp
 import jax.scipy.stats as jss
 
 
+default_weights = [0.8, 0.2]
+
+
 class TwoGaussians:
 
-    def __init__(self, dim):
+    def __init__(self, dim, weights=default_weights):
         self.dim = dim
         self.name = "TwoGaussians"
         self.means = jnp.array(
@@ -16,7 +19,7 @@ class TwoGaussians:
             ]
         )
         self.sigma = jnp.array([0.1])
-        self.weights = jnp.array([0.8, 0.2])
+        self.weights = jnp.array(weights)
         self.xlim = [-1.5, 1.5]
         self.ylim = [-1.5, 1.5]
         self.true_dist_levels = jnp.array([-6.3378773, -3.8378773, -2.337877])

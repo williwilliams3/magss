@@ -51,14 +51,14 @@ def build_kernel(
             rng_key, rng_key1, rng_key2, rng_key3 = jr.split(rng_key, 4)
 
             # Sweep Approx Geodesic Slice Sampler
-            keys_agss = jr.split(rng_key1, sweeps)
+            keys_magss = jr.split(rng_key1, sweeps)
 
-            def one_step_agss(state, key):
+            def one_step_magss(state, key):
                 state, info = meta_sampler.step(key, state)
                 return state, (state, info)
 
             state_meta, (states_meta, info_meta) = jax.lax.scan(
-                one_step_agss, state, keys_agss
+                one_step_magss, state, keys_magss
             )
             # state, info = meta_sampler.step(rng_key1, state)
 
@@ -100,6 +100,7 @@ class meta_geodesic_slice_sampler:
         step_size: float,
         max_stepouts: int,
         metric: Metric,
+        sweeps: int = 1,
         max_shirnkage: int = 100,
     ) -> SamplingAlgorithm:
 
@@ -112,6 +113,6 @@ class meta_geodesic_slice_sampler:
             return cls.init(position, logdensity_fn)
 
         def step_fn(rng_key: PRNGKey, state: SliceState):
-            return kernel(rng_key, state, sampler_fn, alg_steps)
+            return kernel(rng_key, state, sampler_fn, alg_steps, sweeps)
 
         return SamplingAlgorithm(init_fn, step_fn)

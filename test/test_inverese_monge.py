@@ -8,6 +8,7 @@ import jax.numpy as jnp
 from jax.scipy.linalg import cholesky, solve_triangular
 from metrics.geodesics import numerical_integrate_geodesic_fn, general_christoffel_fn
 from metrics import InverseMonge, Metric
+import diffrax
 
 
 class InverseMongeFullrank(Metric):
@@ -34,7 +35,15 @@ class InverseMongeFullrank(Metric):
 
     def geodesic_fn(self, x, v, t):
         dim = self.dim
-        output = numerical_integrate_geodesic_fn(dim, self.christoffel_fn, x, v, t)
+        output = numerical_integrate_geodesic_fn(
+            dim,
+            self.christoffel_fn,
+            x,
+            v,
+            t,
+            step_size_ode=None,
+            solver=diffrax.Dopri5(),
+        )
         return output[0, :dim], output[0, dim:]
 
 
@@ -80,7 +89,10 @@ def test_inverse_monge_classes():
 
     # Initialize both classes
     fullrank_model = InverseMongeFullrank(dim, logdensity_fn, alpha2)
-    monge_model = InverseMonge(dim, logdensity_fn, alpha2)
+    kwargs = {"logdensity_fn": logdensity_fn, "alpha2": alpha2}
+    monge_model = InverseMonge(
+        dim, step_size_ode=None, solver=diffrax.Dopri5(), kwargs=kwargs
+    )
 
     # Test squared_norm_fn
     v = jr.normal(rng_key, x.shape)

@@ -5,10 +5,11 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import jax
 import jax.numpy as jnp
+import jax.random as jr
 import diffrax
 import matplotlib.pyplot as plt
 from metrics.models import Funnel, TwoGaussians
-from metrics import Monge, Generative
+from metrics import Monge, Generative, InverseMonge, InverseGenerative
 from plotting.plotting_functions import get_contours
 import seaborn as sns
 
@@ -50,6 +51,7 @@ def plot_geodesic_balls(
     elif metric_type in ["inverse_monge", "inverse_generative"]:
         xlim = [-3.0, 3.0]
         ylim = [-3.0, 3.0]
+        # x = jnp.zeros(dim)
         x = 0.8 * jnp.ones(dim)
         x = jnp.array([0.6, 1.0])
         if metric_type == "inverse_monge":
@@ -71,6 +73,8 @@ def plot_geodesic_balls(
     # Compute unit circle vectors
     angles = jnp.linspace(0, 2 * jnp.pi, num_points, endpoint=False)
     unit_vectors = jnp.stack((jnp.cos(angles), jnp.sin(angles)), axis=-1)
+
+    # Compute inverse sqrt metric function
 
     # Get true distribution contours
     true_dist_levels = model.true_dist_levels
@@ -119,13 +123,12 @@ def plot_geodesic_balls(
     ax.set_aspect("equal")
     ax.set_xticks([])
     ax.set_yticks([])
-
+    # ax.set_xlim(auto=True)
+    # ax.set_ylim(auto=True)
     ax.margins(0)  # Remove extra padding around the plot
     plt.tight_layout()  # Adjust layout to remove unnecessary white space
-    # Make directory for saving figures if not exits
-    if not os.path.exists("figs"):
-        os.makedirs("figs")
-
+    # plt.axis("off")
+    # ax.legend()
     plt.savefig(f"figs/geodesic_balls_{metric_type}.png")
     print(f"Saved figure to figs/geodesic_balls_{metric_type}.png")
 
@@ -135,3 +138,10 @@ plot_geodesic_balls(radii=jnp.linspace(1, 10, num=8), metric_type="monge")
 plot_geodesic_balls(
     radii=jnp.linspace(1, 5, num=6), metric_type="generative", num_points=10000
 )
+# plot_geodesic_balls(
+#     radii=jnp.linspace(1, 50, num=3), metric_type="inverse_monge", num_points=100
+# )
+
+# plot_geodesic_balls(
+#     radii=jnp.linspace(1, 8, num=3), metric_type="inverse_generative", num_points=1000
+# )

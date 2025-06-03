@@ -1,7 +1,10 @@
 sampler_type: pt
+# Global sampler parameters
 alg_steps: 10
-num_integration_steps: 10
 num_temperatures: 5
-step_size: 0.1
 b_min: 0.001
+# Local sampler parameters
 sub_sampler_type: mala
+step_size: 0.1
+num_integration_steps: 10
+

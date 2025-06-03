@@ -1,4 +1,4 @@
-sampler_type: meta_agss
+sampler_type: meta_magss
 alg_steps: 10
 step_size: 0.1
 step_size_meta: 3.0

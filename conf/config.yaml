@@ -1,6 +1,6 @@
 defaults:
   - manifold: euclidean.yaml
-  - sampler: agss.yaml
+  - sampler: magss.yaml
   - _self_
 
 repeats: 5

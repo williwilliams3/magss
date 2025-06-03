@@ -1,4 +1,4 @@
-sampler_type: agss
+sampler_type: magss
 step_size: 3.0
 max_step_outs: 8
 max_shrinkage: 100

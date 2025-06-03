@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import jax.random as jr
 import jax.numpy as jnp
 import jax
 
@@ -104,3 +105,34 @@ def plot_chains(samples, output_dir, name, dims):
         plt.legend()
         plt.savefig(f"{output_dir}/{name}_{d+1}.png", dpi=200)
         plt.close()
+
+
+def plot_weights(samples, true_samples, output_dir):
+    plt.figure()
+    plt.hist(samples[:, 0], bins=100, alpha=0.5, label="samples")
+    plt.hist(true_samples[:, 0], bins=100, alpha=0.5, label="true samples")
+    plt.legend()
+    plt.savefig(f"{output_dir}/weights.png")
+
+
+def sub_sample(rng_key, samples, max_samples=1000):
+    n_rows, _ = samples.shape
+    if n_rows <= max_samples:
+        return samples
+    if n_rows > max_samples:
+        id_samples = jr.choice(rng_key, n_rows, shape=(max_samples,), replace=False)
+        return samples[id_samples]
+
+
+def plot_field(samples, dim, output_dir):
+    key = jr.key(42)
+    samples = sub_sample(key, samples, max_samples=1000)
+    fig, ax = plt.subplots(1, 1, figsize=(5, 4), sharex=True, sharey=True)
+    ax.set_title(r"$\hat{\phi}$")
+    ax.set_xlabel(r"$d$")
+    ax.set_ylabel(r"$\phi$")
+    samples = jnp.pad(samples, ((0, 0), (1, 1)))  # for the phi-four example
+    for i in range(samples.shape[0]):
+        ax.plot(samples[i], color="red", alpha=0.1)
+    plt.setp(ax, xlim=[0, dim + 1], ylim=[-1.6, 1.6])
+    plt.savefig(f"{output_dir}/field.png")

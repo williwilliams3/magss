@@ -46,12 +46,20 @@ def get_draws(
 
     total_num_steps = burnin + (num_samples // num_chains) * thinning
     # Set initial positions
-    if model_type == "twogaussians":
+    if model_type == "twogaussians" or model_type == "twogaussiansequal":
         initial_positions = jnp.ones((num_chains, dim)) * (-1.0)
+    elif model_type == "phifour":
+        # keys = jax.random.split(rng_key, num_chains)
+        # initial_positions = jax.vmap(lambda k: jax.random.uniform(k, (dim,)) * 2 - 1)(
+        #     keys
+        # )
+        # initial_positions = jnp.ones((num_chains, dim))
+        initial_positions = jnp.ones((num_chains, dim)) * (-1.0)
+
     else:
         initial_positions = jnp.zeros((num_chains, dim))
 
-    if sampler_type not in ["rla", "map_agss"]:
+    if sampler_type not in ["rla"]:
         init_keys = jr.split(rng_key1, num_chains)
         initial_states = jax.vmap(sampler.init)(
             initial_positions,
@@ -62,7 +70,7 @@ def get_draws(
         )
         print("Sampling time: ", elapsed_time)
 
-    elif sampler_type in ["rla", "map_agss"]:
+    elif sampler_type in ["rla"]:
         key1, key2 = jr.split(rng_key, 2)
         keys1 = jr.split(key1, total_num_steps * num_chains)
         keys2 = jr.split(key2, total_num_steps * num_chains)
@@ -105,14 +113,12 @@ def get_draws(
     else:
         samples_tensor = states.position
         if sampler_type not in [
-            "agss",
+            "magss",
             "rla",
-            "map_agss",
-            "meta_agss",
-            "meta_agss_mala",
+            "meta_magss",
         ]:
             print("Acceptance rate", info.acceptance_rate.mean())
-        elif sampler_type in ["agss", "map_agss"]:
+        elif sampler_type in ["magss"]:
             print(
                 "Max shrinkage iterations",
                 jnp.sum(
@@ -120,7 +126,7 @@ def get_draws(
                     == sampler_config.max_shrinkage
                 ),
             )
-        elif sampler_type == "meta_agss":
+        elif sampler_type == "meta_magss":
             print("Acceptance rate", info.info_sba.acceptance_rate.mean())
             print(
                 "Max shrinkage iterations",
@@ -139,6 +145,7 @@ def get_reference_draws(model, name_model, num_samples, sub_name=""):
         "rosenbrock",
         "gaussian",
         "twogaussians",
+        "twogaussiansequal",
         "ninegaussians",
         "gmm",
         "generalmixture",

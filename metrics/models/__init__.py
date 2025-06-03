@@ -8,6 +8,7 @@ from .gaussian_mixtures import NineGaussians, GMM, TwoGaussians
 from .general_mixture import GeneralMixture
 from .logistic_regression import BayesianLogisticRegression
 from .distribution import Distribution
+from .field_system import PhiFour
 
 __all__ = [
     "NineGaussians",
@@ -20,4 +21,5 @@ __all__ = [
     "BayesianLogisticRegression",
     "Distribution",
     "GeneralMixture",
+    "PhiFour",
 ]

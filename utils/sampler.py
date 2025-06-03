@@ -1,10 +1,7 @@
 import os
 
-import mcmc.meta_geoslice
-
 current_file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(os.path.dirname(current_file_path))
-
 
 import jax.numpy as jnp
 import blackjax
@@ -43,7 +40,14 @@ def get_sampler(
         sampler_fn = lambda logdensity_fn: blackjax.normal_random_walk(
             logdensity_fn, sampler_config.ts[0]
         )
-    elif sampler_type in ["rla", "agss", "map_agss"]:
+    elif sampler_type == "nuts":
+        # No window Adaptation
+        sampler_fn = lambda logdensity_fn: blackjax.nuts(
+            logdensity_fn,
+            step_size=step_size,
+            inverse_mass_matrix=jnp.ones(dim),
+        )
+    elif sampler_type in ["rla", "magss", "map_magss"]:
         solver = set_solver(manifold_config)
         args = get_args_from_metric_params(metric_type, distribution, metric_param)
         metric = set_metric(
@@ -55,24 +59,13 @@ def get_sampler(
         )
 
         # Set the sampler function
-        if sampler_type in ["agss"]:
+        if sampler_type in ["magss"]:
 
             def sampler_fn(logdensity_fn):
                 return mcmc.geodesic_slice_sampler(
                     logdensity_fn,
                     step_size,
                     sampler_config.max_step_outs,
-                    metric=metric,
-                )
-
-        elif sampler_type == "map_agss":
-
-            def sampler_fn(logdensity_fn):
-                return mcmc.map_geodesic_slice_sampler(
-                    logdensity_fn,
-                    step_size,
-                    sampler_config.max_step_outs,
-                    num_iters=sampler_config.num_iters,
                     metric=metric,
                 )
 
@@ -115,7 +108,7 @@ def get_sampler(
             sampler_fn=sampler_fn,
             alg_steps=alg_steps,
         )
-    elif sampler_type == "meta_agss":
+    elif sampler_type == "meta_magss":
         solver = set_solver(manifold_config)
         args = get_args_from_metric_params(metric_type, distribution, metric_param)
         metric = set_metric(
@@ -132,6 +125,7 @@ def get_sampler(
             step_size=sampler_config.step_size_meta,
             max_stepouts=sampler_config.max_step_outs,
             metric=metric,
+            sweeps=sampler_config.sweeps,
         )
     else:
         sampler = sampler_fn(logdensity_fn)

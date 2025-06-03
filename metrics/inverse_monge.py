@@ -50,7 +50,7 @@ def set_inverse_monge(logdensity_fn, alpha2):
     def inverse_sqrt_metric_fn(x):
         grad = grad_fn(x)
         L_alpha = 1 + alpha2 * jnp.dot(grad, grad)
-        factor = 1 / (L_alpha**0.5 + 1.0)
+        factor = alpha2 / (L_alpha**0.5 + 1.0)
         return jnp.eye(x.shape[0]) + factor * jnp.outer(grad, grad)
 
     def log_determinant_fn(x):

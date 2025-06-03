@@ -139,9 +139,6 @@ def plot_geodesic_balls(dim=2, num_points=100, radii=[1], metric_type="monge"):
     ax.set_yticks([])
     ax.margins(0)  # Remove extra padding around the plot
     plt.tight_layout()  # Adjust layout to remove unnecessary white space
-    # Make directory if not exits
-    if not os.path.exists("figs"):
-        os.makedirs("figs")
     plt.savefig(f"figs/geodesic_balls_{metric_type}_hitandrun.png")
     print(f"Saved figure to figs/geodesic_balls_{metric_type}_hitandrun.png")
 

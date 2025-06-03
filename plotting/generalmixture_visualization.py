@@ -27,7 +27,7 @@ rng_key = jr.key(0)
 # samples = model.sample(rng_key, 1000)
 key = 1
 indices = jr.choice(rng_key, 10_000, shape=(1000,), replace=False)
-dir_samples = f"logs/model=generalmixture/sampler=meta_agss/dim=2/manifold.integrator=dopri8,manifold.metric=inverse_monge,manifold.metric_param=0.0001,manifold.step_size_ode=null,sampler.step_size=0.001,sampler.sweeps=5/rng_key={key}/samples.npy"
+dir_samples = f"logs/model=generalmixture/sampler=meta_magss/dim=2/manifold.integrator=dopri8,manifold.metric=inverse_monge,manifold.metric_param=0.0001,manifold.step_size_ode=null,sampler.step_size=0.001,sampler.sweeps=5/rng_key={key}/samples.npy"
 tensor_samples = np.load(dir_samples)
 samples = tensor_samples.reshape(10_000, 2)
 samples = samples[indices]

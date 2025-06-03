@@ -9,7 +9,7 @@ python magss/plotting/slice_explanation.py
 
 To replicate **Figure 2**, run:
 ```bash
-python magss/plotting/hit_and_run.py
+python magss/plotting/geodesic_two_modes.py
 ```
 
 To replicate **Figure 3**, run:
@@ -19,10 +19,10 @@ python magss/plotting/geodesic_balls.py
 
 
 ## Sampling
-To sample the **Toy distributions** run for model in funnel, rosenbrock, squiggle:
+To sample the **Toy distribution** models run for manifold.model the options: funnel, rosenbrock and squiggle.
 ```bash
 python magss/sample.py  \
-sampler=agss \
+sampler=magss \
 manifold.model=funnel \
 manifold.dim=2 \
 manifold.metric=fisher \
@@ -33,8 +33,7 @@ manifold.make_plots=True
 To sample the **Two Gaussian Mixture**:
 ```bash
 python magss/sample.py \
-rng_key=1 \
-sampler=agss \
+sampler=magss \
 manifold.model=twogaussians \
 manifold.dim=2 \
 manifold.metric=inverse_monge \
@@ -89,10 +88,10 @@ The structure can be found in `conf/manifold/euclidean.yaml` and `conf/sampler/c
 
 `choose_your_sampler.yaml` can be one of the following options:
 
-1. `agss.yaml`
+1. `magss.yaml`
 2. `digs.yaml`
 3. `mala.yaml`
-4. `meta_agss.yaml`
+4. `meta_magss.yaml`
 5. `pt.yaml`
 
 Consult each individual `.yaml` file for the specific arguments and configurations.
