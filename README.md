@@ -1,5 +1,8 @@
 # Metric-Agnostic Geodesic Slice Sampler
 
+This is the official repo for the UAI 2025 paper *Geodesic Slice Sampler for Multimodal Distributions with Strong Curvature*, the paper is available in this [arXiv link].(https://arxiv.org/pdf/2502.21190)
+
+
 ## Reproducing Figures
 
 To replicate **Figure 1**, run:
